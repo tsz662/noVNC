@@ -8,8 +8,10 @@
 
 import * as Log from '../core/util/logging.js';
 import _, { l10n } from './localization.js';
-import { isTouchDevice, isMac, isIOS, isAndroid, isChromeOS, isSafari,
-         hasScrollbarGutter, dragThreshold }
+import {
+    isTouchDevice, isMac, isIOS, isAndroid, isChromeOS, isSafari,
+    hasScrollbarGutter, dragThreshold
+}
     from '../core/util/browser.js';
 import { setCapture, getPointerEvent } from '../core/util/events.js';
 import KeyTable from "../core/input/keysym.js";
@@ -46,7 +48,7 @@ const UI = {
     reconnectCallback: null,
     reconnectPassword: null,
 
-    async start(options={}) {
+    async start(options = {}) {
         UI.customSettings = options.settings || {};
         if (UI.customSettings.defaults === undefined) {
             UI.customSettings.defaults = {};
@@ -149,9 +151,9 @@ const UI = {
         // * Safari doesn't support alphanumerical input while in fullscreen
         if (!isSafari() &&
             (document.documentElement.requestFullscreen ||
-             document.documentElement.mozRequestFullScreen ||
-             document.documentElement.webkitRequestFullscreen ||
-             document.body.msRequestFullscreen)) {
+                document.documentElement.mozRequestFullScreen ||
+                document.documentElement.webkitRequestFullscreen ||
+                document.body.msRequestFullscreen)) {
             document.getElementById('noVNC_fullscreen_button')
                 .classList.remove("noVNC_hidden");
             UI.addFullscreenHandlers();
@@ -211,11 +213,11 @@ const UI = {
         }
     },
 
-/* ------^-------
-*     /INIT
-* ==============
-* EVENT HANDLERS
-* ------v------*/
+    /* ------^-------
+    *     /INIT
+    * ==============
+    * EVENT HANDLERS
+    * ------v------*/
 
     addControlbarHandlers() {
         document.getElementById("noVNC_control_bar")
@@ -245,7 +247,7 @@ const UI = {
         window.addEventListener('resize', UI.updateControlbarHandle);
 
         const exps = document.getElementsByClassName("noVNC_expander");
-        for (let i = 0;i < exps.length;i++) {
+        for (let i = 0; i < exps.length; i++) {
             exps[i].addEventListener('click', UI.toggleExpander);
         }
     },
@@ -391,11 +393,11 @@ const UI = {
         window.addEventListener('msfullscreenchange', UI.updateFullscreenButton);
     },
 
-/* ------^-------
- * /EVENT HANDLERS
- * ==============
- *     VISUAL
- * ------v------*/
+    /* ------^-------
+     * /EVENT HANDLERS
+     * ==============
+     *     VISUAL
+     * ------v------*/
 
     // Disable/enable controls depending on connection state
     updateVisualState(state) {
@@ -597,7 +599,7 @@ const UI = {
         UI.showControlbarHint(false, false);
     },
 
-    showControlbarHint(show, animate=true) {
+    showControlbarHint(show, animate = true) {
         const hint = document.getElementById('noVNC_control_bar_hint');
 
         if (animate) {
@@ -668,7 +670,7 @@ const UI = {
             newY = controlbarBounds.top + margin;
 
         } else if (newY > controlbarBounds.top +
-                   controlbarBounds.height - handleHeight - margin) {
+            controlbarBounds.height - handleHeight - margin) {
             // Force coordinates to be above the bottom of the control bar
             newY = controlbarBounds.top +
                 controlbarBounds.height - handleHeight - margin;
@@ -742,11 +744,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *    /VISUAL
- * ==============
- *    SETTINGS
- * ------v------*/
+    /* ------^-------
+     *    /VISUAL
+     * ==============
+     *    SETTINGS
+     * ------v------*/
 
     // Initial page load read/initialization of settings
     initSetting(name, defVal) {
@@ -824,7 +826,7 @@ const UI = {
         let val = WebUtil.readSetting(name);
         if (typeof val !== 'undefined' && val !== null &&
             ctrl !== null && ctrl.type === 'checkbox') {
-            if (val.toString().toLowerCase() in {'0': 1, 'no': 1, 'false': 1}) {
+            if (val.toString().toLowerCase() in { '0': 1, 'no': 1, 'false': 1 }) {
                 val = false;
             } else {
                 val = true;
@@ -856,11 +858,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *   /SETTINGS
- * ==============
- *    PANELS
- * ------v------*/
+    /* ------^-------
+     *   /SETTINGS
+     * ==============
+     *    PANELS
+     * ------v------*/
 
     closeAllPanels() {
         UI.closeSettingsPanel();
@@ -869,11 +871,11 @@ const UI = {
         UI.closeExtraKeys();
     },
 
-/* ------^-------
- *   /PANELS
- * ==============
- * SETTINGS (panel)
- * ------v------*/
+    /* ------^-------
+     *   /PANELS
+     * ==============
+     * SETTINGS (panel)
+     * ------v------*/
 
     openSettingsPanel() {
         UI.closeAllPanels();
@@ -915,11 +917,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *   /SETTINGS
- * ==============
- *     POWER
- * ------v------*/
+    /* ------^-------
+     *   /SETTINGS
+     * ==============
+     *     POWER
+     * ------v------*/
 
     openPowerPanel() {
         UI.closeAllPanels();
@@ -962,11 +964,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *    /POWER
- * ==============
- *   CLIPBOARD
- * ------v------*/
+    /* ------^-------
+     *    /POWER
+     * ==============
+     *   CLIPBOARD
+     * ------v------*/
 
     openClipboardPanel() {
         UI.closeAllPanels();
@@ -1007,11 +1009,11 @@ const UI = {
         Log.Debug("<< UI.clipboardSend");
     },
 
-/* ------^-------
- *  /CLIPBOARD
- * ==============
- *  CONNECTION
- * ------v------*/
+    /* ------^-------
+     *  /CLIPBOARD
+     * ==============
+     *  CONNECTION
+     * ------v------*/
 
     openConnectPanel() {
         document.getElementById('noVNC_connect_dlg')
@@ -1072,10 +1074,12 @@ const UI = {
 
         try {
             UI.rfb = new RFB(document.getElementById('noVNC_container'),
-                             url.href,
-                             { shared: UI.getSetting('shared'),
-                               repeaterID: UI.getSetting('repeaterID'),
-                               credentials: { password: password } });
+                url, //url.href,
+                {
+                    shared: UI.getSetting('shared'),
+                    repeaterID: UI.getSetting('repeaterID'),
+                    credentials: { password: password }
+                });
         } catch (exc) {
             Log.Error("Failed to connect to server: " + exc);
             UI.updateVisualState('disconnected');
@@ -1171,7 +1175,7 @@ const UI = {
             UI.updateVisualState('disconnected');
             if (wasConnected) {
                 UI.showStatus(_("Something went wrong, connection is closed"),
-                              'error');
+                    'error');
             } else {
                 UI.showStatus(_("Failed to connect to server"), 'error');
             }
@@ -1208,11 +1212,11 @@ const UI = {
         UI.showStatus(msg, 'error');
     },
 
-/* ------^-------
- *  /CONNECTION
- * ==============
- * SERVER VERIFY
- * ------v------*/
+    /* ------^-------
+     *  /CONNECTION
+     * ==============
+     * SERVER VERIFY
+     * ------v------*/
 
     async serverVerify(e) {
         const type = e.detail.type;
@@ -1239,11 +1243,11 @@ const UI = {
         UI.disconnect();
     },
 
-/* ------^-------
- * /SERVER VERIFY
- * ==============
- *   PASSWORD
- * ------v------*/
+    /* ------^-------
+     * /SERVER VERIFY
+     * ==============
+     *   PASSWORD
+     * ------v------*/
 
     credentials(e) {
         // FIXME: handle more types
@@ -1290,11 +1294,11 @@ const UI = {
             .classList.remove('noVNC_open');
     },
 
-/* ------^-------
- *  /PASSWORD
- * ==============
- *   FULLSCREEN
- * ------v------*/
+    /* ------^-------
+     *  /PASSWORD
+     * ==============
+     *   FULLSCREEN
+     * ------v------*/
 
     toggleFullscreen() {
         if (document.fullscreenElement || // alternative standard method
@@ -1328,7 +1332,7 @@ const UI = {
         if (document.fullscreenElement || // alternative standard method
             document.mozFullScreenElement || // currently working methods
             document.webkitFullscreenElement ||
-            document.msFullscreenElement ) {
+            document.msFullscreenElement) {
             document.getElementById('noVNC_fullscreen_button')
                 .classList.add("noVNC_selected");
         } else {
@@ -1337,11 +1341,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *  /FULLSCREEN
- * ==============
- *     RESIZE
- * ------v------*/
+    /* ------^-------
+     *  /FULLSCREEN
+     * ==============
+     *     RESIZE
+     * ------v------*/
 
     // Apply remote resizing or local scaling
     applyResizeMode() {
@@ -1351,11 +1355,11 @@ const UI = {
         UI.rfb.resizeSession = UI.getSetting('resize') === 'remote';
     },
 
-/* ------^-------
- *    /RESIZE
- * ==============
- * VIEW CLIPPING
- * ------v------*/
+    /* ------^-------
+     *    /RESIZE
+     * ==============
+     * VIEW CLIPPING
+     * ------v------*/
 
     // Update viewport clipping property for the connection. The normal
     // case is to get the value from the setting. There are special cases
@@ -1382,7 +1386,7 @@ const UI = {
         if (scaling) {
             // Can't be clipping if viewport is scaled to fit
             UI.forceSetting('view_clip', false);
-            UI.rfb.clipViewport  = false;
+            UI.rfb.clipViewport = false;
         } else if (brokenScrollbars) {
             UI.forceSetting('view_clip', true);
             UI.rfb.clipViewport = true;
@@ -1396,11 +1400,11 @@ const UI = {
         UI.updateViewDrag();
     },
 
-/* ------^-------
- * /VIEW CLIPPING
- * ==============
- *    VIEWDRAG
- * ------v------*/
+    /* ------^-------
+     * /VIEW CLIPPING
+     * ==============
+     *    VIEWDRAG
+     * ------v------*/
 
     toggleViewDrag() {
         if (!UI.rfb) return;
@@ -1436,11 +1440,11 @@ const UI = {
         viewDragButton.disabled = !UI.rfb.clippingViewport;
     },
 
-/* ------^-------
- *   /VIEWDRAG
- * ==============
- *    QUALITY
- * ------v------*/
+    /* ------^-------
+     *   /VIEWDRAG
+     * ==============
+     *    QUALITY
+     * ------v------*/
 
     updateQuality() {
         if (!UI.rfb) return;
@@ -1448,11 +1452,11 @@ const UI = {
         UI.rfb.qualityLevel = parseInt(UI.getSetting('quality'));
     },
 
-/* ------^-------
- *   /QUALITY
- * ==============
- *  COMPRESSION
- * ------v------*/
+    /* ------^-------
+     *   /QUALITY
+     * ==============
+     *  COMPRESSION
+     * ------v------*/
 
     updateCompression() {
         if (!UI.rfb) return;
@@ -1460,11 +1464,11 @@ const UI = {
         UI.rfb.compressionLevel = parseInt(UI.getSetting('compression'));
     },
 
-/* ------^-------
- *  /COMPRESSION
- * ==============
- *    KEYBOARD
- * ------v------*/
+    /* ------^-------
+     *  /COMPRESSION
+     * ==============
+     *    KEYBOARD
+     * ------v------*/
 
     showVirtualKeyboard() {
         if (!isTouchDevice) return;
@@ -1624,11 +1628,11 @@ const UI = {
         }
     },
 
-/* ------^-------
- *   /KEYBOARD
- * ==============
- *   EXTRA KEYS
- * ------v------*/
+    /* ------^-------
+     *   /KEYBOARD
+     * ==============
+     *   EXTRA KEYS
+     * ------v------*/
 
     openExtraKeys() {
         UI.closeAllPanels();
@@ -1651,7 +1655,7 @@ const UI = {
         if (document.getElementById('noVNC_modifiers')
             .classList.contains("noVNC_open")) {
             UI.closeExtraKeys();
-        } else  {
+        } else {
             UI.openExtraKeys();
         }
     },
@@ -1724,11 +1728,11 @@ const UI = {
         UI.idleControlbar();
     },
 
-/* ------^-------
- *   /EXTRA KEYS
- * ==============
- *     MISC
- * ------v------*/
+    /* ------^-------
+     *   /EXTRA KEYS
+     * ==============
+     *     MISC
+     * ------v------*/
 
     updateViewOnly() {
         if (!UI.rfb) return;
@@ -1793,10 +1797,10 @@ const UI = {
         selectbox.options.add(optn);
     },
 
-/* ------^-------
- *    /MISC
- * ==============
- */
+    /* ------^-------
+     *    /MISC
+     * ==============
+     */
 };
 
 export default UI;
