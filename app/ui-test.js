@@ -1187,7 +1187,7 @@ const UI = {
 
     let query = window.location.search;
     let queryParams = new URLSearchParams(query);
-    let endpointUrl = queryParams.get("operation_endpoint");
+    let endpointUrl = queryParams.get("operator_endpoint");
 
     try {
       UI.rfb = new RFB(
